@@ -1,11 +1,13 @@
 const users = require("./routes/api/users");
 const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
-
+const bodyParser = require("body-parser");
 const express = require("express");
 const mongoose = require("mongoose");
 
 const db = require("./config/keys").mongoURI;
+
+//body-parser Middleware
 
 mongoose
   .connect(db, { useNewUrlParser: true })
@@ -13,6 +15,9 @@ mongoose
   .catch(err => console.log(err));
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => res.send("Working"));
 

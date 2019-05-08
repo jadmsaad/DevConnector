@@ -4,8 +4,9 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 
 //Load Validation
-const validateProfileInput = require("../../validation/profile");
+const validateProfileInput = require("../../Validation/profile");
 
+const validateExperienceInput = require("../../Validation/experience");
 //Load Profile Model
 const Profile = require("../../Models/Profile");
 
@@ -21,7 +22,7 @@ router.get("/test", (req, res) => res.json({ msg: "profile working" }));
 // @desc Get Current user's profile
 // @access private
 router.get(
-  "/",
+  "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const errors = {};
@@ -107,6 +108,141 @@ router.post(
         });
       }
     });
+  }
+);
+
+// @route GET api/profile
+// @desc Get all profiles
+// @access Public
+
+router.get("/", async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route GET api/profile/user/:user_id
+// @desc Get profile by id
+// @access Public
+
+router.get("/user/:user_id", async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id
+    }).populate("user", ["name", "avatar"]);
+
+    if (!profile) res.status(400).json({ msg: "Profile was not found" });
+
+    res.json(profile);
+  } catch (err) {
+    if (err.kind == "ObjectId")
+      res.status(400).json({ msg: "Profile was not found" });
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route DELETE api/profile
+// @desc Delete profile,user and posts
+// @access Private
+
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      // @todo - remove users posts
+      //Remove profile
+      await Profile.findOneAndRemove({ user: req.user.id });
+      //Remove User
+      await User.findOneAndRemove({ _id: req.user.id });
+      res.json({ msh: "Deleted" });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+// @route PUT api/experience
+// @desc Add profile experience
+// @access Private
+router.put(
+  "/experience",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const { errors, isValid } = validateExperienceInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
+
+    const newExp = {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      profile.experience.unshift(newExp);
+
+      await profile.save();
+
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+// @route DELETE api/profile/experience
+// @desc delete experience from profile
+// @access Private
+
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      //Get remove indexawait 
+      const removeIndex = profile.experience
+        .map(item => item.id)
+        .indexOf(req.params.exp_id);
+
+      profile.experience.splice(removeIndex, 1);
+
+      await profile.save();
+
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+
   }
 );
 

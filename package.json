@@ -5,14 +5,19 @@
   "main": "server.js",
   "scripts": {
     "Start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Jad Saad",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "config": "^3.1.0",
     "express": "^4.16.4",
+    "express-check": "0.0.1",
+    "express-validator": "^5.3.1",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.0",
     "mongodb": "^3.1.13",
@@ -20,7 +25,10 @@
     "nodemon": "^1.18.10",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "request": "^2.88.0",
     "validator": "^10.11.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
 }

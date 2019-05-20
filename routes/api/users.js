@@ -52,7 +52,26 @@ router.post("/register", (req, res) => {
           newUser.password = hash;
           newUser
             .save()
-            .then(user => res.json(user))
+            .then(user => {
+              const payload = {
+                id: user.id,
+                name: user.name,
+                avatar: user.avatar
+              }; // create jwt paylod
+
+              // Sign Token
+              jwt.sign(
+                payload,
+                keys.secretOrKey,
+                { expiresIn: 360000 },
+                (err, token) => {
+                  res.json({
+                    success: true,
+                    token: "Bearer " + token
+                  });
+                }
+              );
+            })
             .catch(err => console.log(err));
         });
       });
@@ -77,7 +96,7 @@ router.post("/login", (req, res) => {
   // Check for User
   User.findOne({ email }).then(user => {
     if (!user) {
-      errors.email = "User not found";
+      errors.push("User not found");
       return res.status(404).json(errors);
     }
     // chec for password
@@ -100,7 +119,7 @@ router.post("/login", (req, res) => {
           }
         );
       } else {
-        errors.password = "Incorrect Password";
+        errors.push("Incorrect Password");
         return res.status(400).json(errors);
       }
     });

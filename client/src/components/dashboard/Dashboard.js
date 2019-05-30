@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 import { getCurrentProfile } from "../../actions/profile";
 import Spinner from "../layout/Spinner";
 import { Link } from "react-router-dom";
+import DashboardActions from "./DashboardActions";
+import Experience from "./Experience";
+import Education from "./Education";
 const Dashboard = ({
   getCurrentProfile,
   auth: { user },
@@ -24,7 +27,16 @@ const Dashboard = ({
         Welcome {user && user.name}
       </p>
       {profile !== null ? (
-        <Fragment> has </Fragment>
+        <Fragment>
+          {" "}
+          <DashboardActions />
+          {profile.experience.length > 0 && (
+            <Experience experience={profile.experience} />
+          )}
+          {profile.education.length > 0 && (
+            <Education education={profile.education} />
+          )}
+        </Fragment>
       ) : (
         <Fragment>
           {" "}

@@ -63,12 +63,12 @@ router.post(
 
     // Check Validation
     if (!isValid) {
-      return res.status(400).json(errors);
+      return res.status(400).send(errors);
     }
     // Get fields
     const profileFields = {};
     profileFields.user = req.user.id;
-    if (req.body.handle) profileFields.handle = req.body.handle;
+    // if (req.body.handle) profileFields.handle = req.body.handle;
     if (req.body.company) profileFields.company = req.body.company;
     if (req.body.website) profileFields.website = req.body.website;
     if (req.body.location) profileFields.location = req.body.location;
@@ -98,17 +98,17 @@ router.post(
         ).then(profile => res.json(profile));
       } else {
         // Create
-
+        new Profile(profileFields).save().then(profile => res.json(profile));
         // Check if handle exists
-        Profile.findOne({ handle: profileFields.handle }).then(profile => {
-          if (profile) {
-            errors.handle = "That handle already exists";
-            return res.status(400).json(errors);
-          }
+        // Profile.findOne({ handle: profileFields.handle }).then(profile => {
+        //   if (profile) {
+        //     errors.handle = "That handle already exists";
+        //     return res.status(400).json(errors);
+        //   }
 
-          // Save Profile
-          new Profile(profileFields).save().then(profile => res.json(profile));
-        });
+        //   // Save Profile
+
+        // });
       }
     });
   }
@@ -214,7 +214,7 @@ router.put(
 
       res.json(profile);
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
       res.status(500).send("Server Error");
     }
   }
@@ -242,13 +242,13 @@ router.delete(
 
       res.json(profile);
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
       res.status(500).send("Server Error");
     }
   }
 );
 
-// @route PUT api/education
+// @route PUT api/profile/education
 // @desc Add profile education
 // @access Private
 router.put(
@@ -319,7 +319,7 @@ router.delete(
 
       res.json(profile);
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
       res.status(500).send("Server Error");
     }
   }

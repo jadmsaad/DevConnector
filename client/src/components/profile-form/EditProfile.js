@@ -16,7 +16,7 @@ const EditProfile = ({
     location: "",
     status: "",
     skills: "",
-    githubusername: "",
+    githubUserName: "",
     bio: "",
     twitter: "",
     facebook: "",
@@ -35,8 +35,8 @@ const EditProfile = ({
       location: loading || !profile.location ? "" : profile.location,
       status: loading || !profile.status ? "" : profile.status,
       skills: loading || !profile.skills ? "" : profile.skills.join(),
-      githubusername:
-        loading || !profile.githubusername ? "" : profile.githubusername,
+      githubUserName:
+        loading || !profile.githubUserName ? "" : profile.githubUserName,
       bio: loading || !profile.bio ? "" : profile.bio,
       twitter: loading || !profile.social ? "" : profile.social.twitter,
       facebook: loading || !profile.social ? "" : profile.social.facebook,
@@ -44,7 +44,7 @@ const EditProfile = ({
       youtube: loading || !profile.social ? "" : profile.social.youtube,
       instagram: loading || !profile.social ? "" : profile.social.instagram
     });
-  }, [loading]);
+  }, [loading, getCurrentProfile]);
 
   const {
     company,
@@ -52,7 +52,7 @@ const EditProfile = ({
     location,
     status,
     skills,
-    githubusername,
+    githubUserName,
     bio,
     twitter,
     facebook,
@@ -73,7 +73,7 @@ const EditProfile = ({
   };
   return (
     <Fragment>
-      <h1 className="large text-primary">Create Your Profile</h1>
+      <h1 className="large text-primary">Edit Your Profile</h1>
       <p className="lead">
         <i className="fas fa-user" /> Let's get some information to make your
         profile stand out
@@ -148,8 +148,8 @@ const EditProfile = ({
           <input
             type="text"
             placeholder="Github Username"
-            name="githubusername"
-            value={githubusername}
+            name="githubUserName"
+            value={githubUserName}
             onChange={e => onChange(e)}
           />
           <small className="form-text">
@@ -237,9 +237,9 @@ const EditProfile = ({
           </Fragment>
         )}
         <input type="submit" className="btn btn-primary my-1" />
-        <a className="btn btn-light my-1" href="dashboard.html">
+        <Link className="btn btn-light my-1" to="/dashboard">
           Go Back
-        </a>
+        </Link>
       </form>
     </Fragment>
   );

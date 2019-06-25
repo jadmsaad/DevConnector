@@ -172,8 +172,8 @@ router.put(
 // @ DELETE api/posts/like/:PostID
 // @desc unlike a post
 // @access Private
-router.delete(
-  "/like/:PostID",
+router.put(
+  "/unlike/:PostID",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
@@ -230,7 +230,7 @@ router.post(
         user: req.user.id
       };
 
-      post.comments.unshift(newComment);
+      post.comments.push(newComment);
       await post.save();
 
       res.json(post.comments);

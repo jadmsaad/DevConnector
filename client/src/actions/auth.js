@@ -21,10 +21,15 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get("/users/current/");
-    dispatch({
-      type: USER_LOADED,
-      payload: res.data
-    });
+    if (res.data.name)
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data
+      });
+    else
+      dispatch({
+        type: AUTH_ERROR
+      });
   } catch (err) {
     dispatch({
       type: AUTH_ERROR

@@ -4,7 +4,10 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const keys = require("../../config/keys");
+// const keys = require("../../config/keys");
+
+const config = require("config");
+const secretOrKey = config.get("secretOrKey");
 
 //Load Input Validation
 const validateRegisterInput = require("../../Validation/register");
@@ -62,7 +65,7 @@ router.post("/register", (req, res) => {
               // Sign Token
               jwt.sign(
                 payload,
-                keys.secretOrKey,
+                secretOrKey,
                 { expiresIn: 360000 },
                 (err, token) => {
                   res.json({
@@ -107,17 +110,12 @@ router.post("/login", (req, res) => {
         const payload = { id: user.id, name: user.name, avatar: user.avatar }; // create jwt paylod
 
         // Sign Token
-        jwt.sign(
-          payload,
-          keys.secretOrKey,
-          { expiresIn: 3600 },
-          (err, token) => {
-            res.json({
-              success: true,
-              token: "Bearer " + token
-            });
-          }
-        );
+        jwt.sign(payload, secretOrKey, { expiresIn: 3600 }, (err, token) => {
+          res.json({
+            success: true,
+            token: "Bearer " + token
+          });
+        });
       } else {
         errors.push("Incorrect Password");
         return res.status(400).json(errors);

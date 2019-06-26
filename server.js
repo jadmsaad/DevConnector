@@ -7,17 +7,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const path = require("path");
-
-const db = require("./config/keys").mongoURI;
-
-//body-parser Middleware
-
-mongoose
-  .connect(db, { useNewUrlParser: true })
-  .then(() => console.log("Connected"))
-  .catch(err => console.log(err));
+const connectDB = require("./config/db");
 
 const app = express();
+
+connectDB();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

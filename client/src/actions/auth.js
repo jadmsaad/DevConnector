@@ -20,7 +20,7 @@ export const loadUser = () => async dispatch => {
   }
 
   try {
-    const res = await axios.get("/users/current/");
+    const res = await axios.get("/api/users/current/");
     if (res.data.name)
       dispatch({
         type: USER_LOADED,
@@ -53,7 +53,7 @@ export const register = ({
   const body = JSON.stringify({ name, email, password, password2 });
 
   try {
-    const res = await axios.post("/users/register", body, config);
+    const res = await axios.post("/api/users/register", body, config);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -85,7 +85,7 @@ export const login = (email, password) => async dispatch => {
   const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post("/users/login", body, config);
+    const res = await axios.post("/api/users/login", body, config);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data

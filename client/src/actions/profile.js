@@ -14,7 +14,7 @@ import {
 //Get current user profile
 export const getCurrentProfile = () => async dispatch => {
   try {
-    const res = await axios.get("profile/current");
+    const res = await axios.get("/api/profile/current");
 
     dispatch({
       type: GET_PROFILE,
@@ -32,7 +32,7 @@ export const getCurrentProfile = () => async dispatch => {
 export const getProfiles = () => async dispatch => {
   dispatch({ type: CLEAR_PROFILE });
   try {
-    const res = await axios.get("/profile");
+    const res = await axios.get("/api/profile");
 
     dispatch({
       type: GET_PROFILES,
@@ -49,7 +49,7 @@ export const getProfiles = () => async dispatch => {
 // Get profile by id
 export const getProfileById = userId => async dispatch => {
   try {
-    const res = await axios.get(`/profile/user/${userId}`);
+    const res = await axios.get(`/api/profile/user/${userId}`);
 
     dispatch({
       type: GET_PROFILE,
@@ -67,7 +67,7 @@ export const getProfileById = userId => async dispatch => {
 //Get github repos
 export const getGithubRepos = userName => async dispatch => {
   try {
-    const res = await axios.get(`/profile/github/${userName}`);
+    const res = await axios.get(`/api/profile/github/${userName}`);
 
     dispatch({
       type: GET_REPOS,
@@ -95,7 +95,7 @@ export const createProfile = (
     };
 
     // const formDataS = JSON.stringify(formData);
-    const res = await axios.post("/profile", formData, config);
+    const res = await axios.post("/api/profile", formData, config);
 
     dispatch({
       type: GET_PROFILE,
@@ -134,7 +134,7 @@ export const addExperience = (formData, history) => async dispatch => {
     };
 
     // const formDataS = JSON.stringify(formData);
-    const res = await axios.put("/profile/experience", formData, config);
+    const res = await axios.put("/api/profile/experience", formData, config);
 
     dispatch({
       type: UPDATE_PROFILE,
@@ -171,7 +171,7 @@ export const addEducation = (formData, history) => async dispatch => {
     };
 
     // const formDataS = JSON.stringify(formData);
-    const res = await axios.put("/profile/education", formData, config);
+    const res = await axios.put("/api/profile/education", formData, config);
 
     dispatch({
       type: UPDATE_PROFILE,
@@ -201,7 +201,7 @@ export const addEducation = (formData, history) => async dispatch => {
 
 export const deleteExperience = id => async dispatch => {
   try {
-    const res = await axios.delete(`/profile/experience/${id}`);
+    const res = await axios.delete(`/api/profile/experience/${id}`);
     dispatch({
       type: UPDATE_PROFILE,
       payload: res.data
@@ -220,7 +220,7 @@ export const deleteExperience = id => async dispatch => {
 
 export const deleteEducation = id => async dispatch => {
   try {
-    const res = await axios.delete(`/profile/education/${id}`);
+    const res = await axios.delete(`/api/profile/education/${id}`);
     dispatch({
       type: UPDATE_PROFILE,
       payload: res.data
@@ -240,7 +240,7 @@ export const deleteEducation = id => async dispatch => {
 export const deleteAccount = () => async dispatch => {
   if (window.confirm("Are you sure? This can NOT be undone"))
     try {
-      await axios.delete(`/profile/`);
+      await axios.delete(`/api/profile/`);
       dispatch({ type: CLEAR_PROFILE });
       dispatch({ type: ACCOUNT_DELETED });
 

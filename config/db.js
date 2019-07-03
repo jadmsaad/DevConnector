@@ -3,7 +3,9 @@ const config = require("config");
 // const db = config.get("mongoURI");
 const keys = require("./keys");
 
-const db = keys.mongoURI;
+// const db = keys.mongoURI;
+
+const db = config.get("mongoURI");
 
 const connectDB = async () => {
   try {
